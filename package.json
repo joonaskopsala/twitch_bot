@@ -1,0 +1,19 @@
+{
+  "name": "twitch-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "config": "^3.3.7",
+    "express": "^4.18.1",
+    "spotify-web-api-node": "^5.0.2",
+    "tmi.js": "^1.5.0"
+  }
+}
