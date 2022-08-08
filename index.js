@@ -1,10 +1,9 @@
 const tmi = require('tmi.js');
-const config = require('config');
+const path = require('node:path');
+const conf = require(path.resolve(process.cwd(), 'config/default.json'), 'utf8');
+const TWITCH_OAUTH_TOKEN = conf.Settings.twitch_token;
+const token = conf.Settings.spotify_token;
 
-const TWITCH_OAUTH_TOKEN = config.get('Settings.twitch_token');
-const token = config.get('Settings.spotify_token');;
-
-const Promise = require("bluebird");
 const SpotifyWebApi = require('spotify-web-api-node');
 const express = require('express');
 
@@ -15,10 +14,10 @@ const client = new tmi.Client({
     reconnect: true
   },
   identity: {
-    username: config.get('Settings.twitch_username'),
+    username: conf.Settings.twitch_username,
     password: TWITCH_OAUTH_TOKEN
   },
-  channels: [config.get('Settings.channel')]
+  channels: [conf.Settings.channel]
 });
 
 client.connect();
@@ -27,7 +26,7 @@ client.on('message', (channel, tags, message, self) => {
   // Ignore echoed messages.
   if(self) return;
 
-    if(tags['custom-reward-id'] == config.get('Settings.reward_id')) {
+    if(tags['custom-reward-id'] == conf.Settings.reward_id) {
         if(message.includes('https://open.spotify.com/track/')){
             var url = parseSpotifyUrl(message);
             spotifyApi.addToQueue(
@@ -86,11 +85,11 @@ const scopes = [
  
 const spotifyApi = new SpotifyWebApi({
    redirectUri: 'http://localhost:8888/callback',
-   clientId: '7c31cc2bce9e40bcb1ad8e6392b747c6',
-   clientSecret: '7d85460c21a447e9823296a81e23d04d'
+   clientId: conf.Settings.client_id,
+   clientSecret: conf.Settings.client_secret
 });
 
-spotifyApi.setAccessToken(token);
+//spotifyApi.setAccessToken(token);
  
 const app = express();
  
